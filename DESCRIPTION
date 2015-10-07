@@ -5,7 +5,8 @@ Version: 0.1
 Date: 2015-10-05
 Author: c(person("David", "Robinson", email = "drobinson@stackoverflow.com", role = c("aut", "cre")))
 Maintainer: David Robinson <drobinson@stackoverflow.com>
-Description: Empirical Bayes on binomial data. See
+Description: Tools for performing empirical bayes estimation
+    on binomial data. See
     http://varianceexplained.org/r/empirical_bayes_baseball/
 License: MIT + file LICENSE
 LazyData: TRUE

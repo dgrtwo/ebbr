@@ -17,4 +17,20 @@ function, with alpha and beta parameters}
 \description{
 Add a layer showing a beta estimation
 }
+\examples{
+set.seed(2015)
+probs <- rbeta(100, 10, 50)
+total <- round(rlnorm(100, 5, 2)) + 1
+successes <- rbinom(100, total, probs)
+
+bb <- estimate_beta_binom(successes, total)
+bb
+
+library(ggplot2)
+
+dat <- data.frame(successes, total)
+ggplot(dat, aes(successes / total)) +
+    geom_histogram(aes(y = ..density..)) +
+    geom_beta(bb)
+}
 

@@ -2,7 +2,8 @@
 % Please edit documentation in R/estimate_beta_binom.R
 \name{estimate_beta_binom}
 \alias{estimate_beta_binom}
-\title{Estimate the shape parameters of a beta-binomial distribution}
+\title{Estimate the shape parameters of a beta by fitting
+a beta-binomial distribution}
 \usage{
 estimate_beta_binom(successes, totals)
 }
@@ -11,7 +12,27 @@ estimate_beta_binom(successes, totals)
 
 \item{totals}{Vector of totals}
 }
+\value{
+A one-row data.frame with two columns:
+\code{alpha} and \code{beta}.
+}
 \description{
-Estimate the shape parameters of a beta-binomial distribution
+Estimate the shape parameters of a beta based on a
+set of success / total pairs, by fitting a
+beta-binomial distribution. This is generally more
+reliable than the method of moments done by
+\code{\link{estimate_beta_mm}}, since it takes into
+account that it should trust values with higher
+totals. However, it does use the method of moments to
+choose its starting parameters in the optimization.
+}
+\examples{
+set.seed(2015)
+probs <- rbeta(100, 10, 50)
+total <- round(rlnorm(100, 5, 2)) + 1
+successes <- rbinom(100, total, probs)
+
+bb <- estimate_beta_binom(successes, total)
+bb
 }
 

@@ -3,19 +3,35 @@
 \name{estimate_beta_mm}
 \alias{estimate_beta_mm}
 \title{Estimate parameters for the beta distribution using the
-method of moments.}
+method of moments}
 \usage{
-estimate_beta_mm(x)
+estimate_beta_mm(successes, totals)
 }
 \arguments{
-\item{x}{A numeric vector}
+\item{successes}{Vector of successes}
+
+\item{totals}{Vector of totals}
 }
 \value{
-A data.frame with two values: alpha and beta.
+A one-row data.frame with two columns:
+\code{alpha} and \code{beta}.
+
+set.seed(2015)
+probs <- rbeta(100, 10, 50)
+total <- round(rlnorm(100, 5, 2)) + 1
+successes <- rbinom(100, total, probs)
+
+bb <- estimate_beta_mm(successes, total)
+bb
 }
 \description{
 Estimate the two shape parameters (here called alpha and
 beta) for the beta distribution using the method of
 moments.
+}
+\details{
+See here for more information on the method this uses:
+
+\url{http://stats.stackexchange.com/questions/12232}
 }
 
