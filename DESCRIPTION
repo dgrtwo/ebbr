@@ -3,8 +3,8 @@ Type: Package
 Title: Empirical Bayes on binomial data
 Version: 0.1
 Date: 2015-10-05
-Author: c(person("David", "Robinson", email = "drobinson@stackoverflow.com", role = c("aut", "cre")))
-Maintainer: David Robinson <drobinson@stackoverflow.com>
+Author: c(person("David", "Robinson", email = "admiral.david@gmail.com", role = c("aut", "cre")))
+Maintainer: David Robinson <admiral.david@gmail.com>
 Description: Tools for performing empirical bayes estimation
     on binomial data. See
     http://varianceexplained.org/r/empirical_bayes_baseball/
