@@ -27,17 +27,60 @@
 #' bb
 #'
 #' @export
-estimate_beta_binom <- function(successes, totals) {
-  # negative log likelihood of data given alpha; beta
-  ll <- function(alpha, beta) {
-    -sum(VGAM::dbetabinom.ab(successes, totals, alpha, beta, log = TRUE))
+estimate_beta_binom <- function(tbl, x, n,
+                                mu_predictors = ~1,
+                                sigma_predictors = ~1,
+                                cred_level = .05,
+                                mu.link = "logit",
+                                sigma.link = "log", ...) {
+  estimate_beta_binom_(tbl,
+                       lazyeval::lazy(x),
+                       lazyeval::lazy(n),
+                       mu_predictors = mu_predictors,
+                       sigma_predictors = sigma_predictors,
+                       cred_level = .05,
+                       mu_link = "logit",
+                       sigma_link = "log",
+                       ...)
+}
+
+
+estimate_beta_binom_ <- function(tbl, x, n,
+                                 mu_predictors = ~1,
+                                 sigma_predictors = ~1,
+                                 cred_level = .05,
+                                 mu.link = "logit",
+                                 sigma.link = "log",
+                                 ...) {
+  # create a formula for beta-binomial model
+  lhs <- substitute(cbind(x, n - x), list(x = x$expr, n = n$expr))
+  form <- as.formula(paste(deparse(lhs), deparse(mu_predictors)))
+
+  fam <- eval(substitute(
+    gamlss.dist::BB(mu.link = x, sigma.link = y),
+    list(x = mu.link, y = sigma.link)
+  ))
+  capture.output(
+    fit <- gamlss::gamlss(form, sigma.predictors = sigma_predictors,
+                          data = tbl, family = fam, ...)
+  )
+
+  mu <- fitted(fit, "mu")
+  sigma <- fitted(fit, "sigma")
+
+  no_predictors <- (mu_predictors == ~1) && (sigma_predictors == ~1)
+  if (no_predictors) {
+    mu <- mu[1]
+    sigma <- sigma[1]
   }
 
-  # use the method of moments for starting parameters
-  mm_estimate <- estimate_beta_mm(successes, totals)
-  m <- stats4::mle(ll, start = list(alpha = mm_estimate$alpha,
-                            beta = mm_estimate$beta),
-           method = "L-BFGS-B")
-  co <- unname(m@coef)
-  data.frame(alpha = co[1], beta = co[2])
+  alpha <- mu / sigma
+  beta <- (1 - mu) / sigma
+
+  ret <- list(parameters = data_frame(alpha = alpha, beta = beta),
+              fit = fit)
+
+  class(ret) <- c("beta_binomial_dist")
+
+  ret
 }

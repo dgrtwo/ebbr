@@ -11,8 +11,9 @@ Description: This contains tools for performing empirical bayes
     observation.
 License: MIT + file LICENSE
 LazyData: TRUE
-Imports: stats4,
-    VGAM,
+Imports: gamlss,
     ggplot2,
-    broom
-Suggests: dplyr
+    broom,
+    lazyeval
+Suggests: dplyr,
+    testthat

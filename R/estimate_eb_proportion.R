@@ -31,7 +31,9 @@
 #' total <- round(rlnorm(1000, 5, 2)) + 1
 #' success <- rbinom(1000, total, true_prob)
 #'
-#' result <- estimate_eb_proportion(success, total, total > 100)
+#' d <- data_frame(success, total)
+#'
+#' result <- estimate_eb_proportion(d, success, total)
 #'
 #' prior <- glance(result)
 #'
@@ -44,22 +46,37 @@
 #'              color = "red", lty = 2)
 #'
 #' @export
-estimate_eb_proportion <- function(x, n, prior_filter = TRUE,
-                                   cred_level = .05) {
+estimate_eb_proportion <- function(tbl, x, n,
+                                   mu_predictors = ~1,
+                                   sigma_predictors = ~1,
+                                   cred_level = .05, ...) {
+  estimate_eb_proportion_(tbl, lazyeval::lazy(x),
+                          lazyeval::lazy(n),
+                          mu_predictors = mu_predictors,
+                          sigma_predictors = sigma_predictors,
+                          cred_level = cred_level, ...)
+}
+
+
+#' @rdname estimate_eb_proportion
+#' @export
+estimate_eb_proportion_ <- function(tbl, x, n, prior_filter = TRUE,
+                                    mu_predictors = ~1,
+                                    sigma_predictors = ~1,
+                                    cred_level = .05, ...) {
   # estimate a prior
-  prior <- estimate_beta_binom(x[prior_filter], n[prior_filter])
+  prior <- estimate_beta_binom_(tbl[prior_filter, ], x, n,
+                                mu_predictors, sigma_predictors, ...)
+  x_value <- lazyeval::lazy_eval(x, tbl)
+  n_value <- lazyeval::lazy_eval(n, tbl)
 
-  ret <- list()
-  ret$table <- data.frame(alpha1 = x + prior$alpha,
-                          beta1 = n - x + prior$beta)
-  ret$table <- transform(ret$table,
-                         estimate = alpha1 / (alpha1 + beta1),
-                         raw.estimate = x / n,
-                         conf.low = qbeta(cred_level / 2, alpha1, beta1),
-                         conf.high = qbeta(1 - cred_level / 2, alpha1, beta1))
+  ret <- dplyr::data_frame(
+    alpha1 = x_value + prior$parameters$alpha,
+    beta1 = n_value - x_value + prior$parameters$beta,
+    estimate = alpha1 / (alpha1 + beta1),
+    raw_estimate = x_value / n_value,
+    conf_low = qbeta(cred_level / 2, alpha1, beta1),
+    conf_high = qbeta(1 - cred_level / 2, alpha1, beta1))
 
-  ret$prior <- prior
-  class(ret) <- "ebbinom"
-
-  ret
+  bind_cols(tbl, ret)
 }
