@@ -5,7 +5,7 @@
 #'
 #' @param x An object of class "ebb_prior", representing a beta-binomial distribution.
 #' @param data For augment, the original data that should be appended to.
-#' @param augment For augment, the level of the credible intervals for each
+#' @param cred_level For augment, the level of the credible intervals for each
 #' observation. If NULL, do not add credible intervals.
 #' @param newdata For augment, a new data set.
 #' @param ... Extra arguments (not used)

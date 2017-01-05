@@ -62,5 +62,9 @@ mm$assignments
 mm$assignments \%>\%
   count(cluster, .cluster)
 
+library(ggplot2)
+ggplot(mm$assignments, aes(x / total, fill = .cluster)) +
+  geom_histogram()
+
 }
 

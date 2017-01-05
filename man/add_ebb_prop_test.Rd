@@ -46,12 +46,13 @@ add_ebb_prop_test(eb, .25, sort = TRUE)
 add_ebb_prop_test(eb, .3, sort = TRUE)
 add_ebb_prop_test(eb, .4, sort = TRUE)
 
-# comparing the true probability to the posterior probability
-# that it is under .25
+# comparing the actual p to the posterior probability
+# that p is under .25
 library(ggplot2)
 
 ggplot(add_ebb_prop_test(eb, .25), aes(prob, .pep, color = log10(total))) +
-  geom_point()
+  geom_point() +
+  geom_vline(xintercept = .25, color = "red", lty = 2)
 
 }
 

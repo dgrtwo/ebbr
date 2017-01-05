@@ -62,6 +62,7 @@ vary based on other parameters in the table.
 }
 \examples{
 
+# example with baseball data
 library(Lahman)
 library(dplyr)
 
@@ -73,7 +74,13 @@ career <- Batting \%>\%
   summarize(H = sum(H), AB = sum(AB)) \%>\%
   filter(AB > 0)
 
-career \%>\% ebb_fit_prior(H, AB)
+# maximum likelihood estimation
+fit <- career \%>\% ebb_fit_prior(H, AB)
+
+fit
+tidy(fit)
+augment(fit)
+glance(fit)
 
 # method of moments
 career \%>\% ebb_fit_prior(H, AB, method = "mm")
@@ -82,6 +89,20 @@ career \%>\% ebb_fit_prior(H, AB, method = "mm")
 career \%>\%
   filter(AB > 100) \%>\%
   ebb_fit_prior(H, AB, method = "mm")
+
+# allow mu to vary with AB using beta-binomial regression
+# see: http://varianceexplained.org/r/bayesian_ab_baseball/
+eb <- career \%>\%
+  filter(AB > 100) \%>\%
+  ebb_fit_prior(H, AB, mu_predictors = ~ log10(AB))
+
+tidy(eb)
+augment(eb)
+
+library(ggplot2)
+ggplot(augment(eb), aes(AB, .fitted)) +
+  geom_point() +
+  scale_x_log10()
 
 }
 

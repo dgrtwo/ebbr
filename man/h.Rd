@@ -40,10 +40,10 @@ The "exact" solution is exact only for integer values of c.
 h(60, 40, 50, 50)
 h(60, 40, 50, 50, approx = TRUE)
 
-# check against random simulation:
+# compare against random simulation:
 mean(rbeta(1e5, 60, 40) > rbeta(1e5, 50, 50))
 
-# It is vectorized across one or multiple arguments
+# it is vectorized across one or multiple arguments
 a <- 1:19
 h(a, 20 - a, 10, 10)
 plot(a, h(a, 20 - a, 10, 10))

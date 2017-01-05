@@ -3,21 +3,21 @@
 \name{add_ebb_estimate}
 \alias{add_ebb_estimate}
 \alias{add_ebb_estimate_}
-\title{Estimate proportions of various success/total counts}
+\title{Perform empirical Bayes shrinkage on a data frame}
 \usage{
 add_ebb_estimate(tbl, x, n, cred_level = 0.05, prior_subset = TRUE, ...)
 
 add_ebb_estimate_(tbl, x, n, prior_subset = TRUE, cred_level = 0.05, ...)
 }
 \arguments{
-\item{tbl}{A table}
+\item{tbl}{A table.}
 
-\item{x}{Column containing number of successes}
+\item{x}{Column containing number of successes.}
 
-\item{n}{Column containing totals}
+\item{n}{Column containing totals.}
 
-\item{cred_level}{Level of credible interval to
-compute. If NULL, do not compute intervals.}
+\item{cred_level}{Level of credible interval to compute. If NULL,
+do not compute intervals.}
 
 \item{prior_subset}{An expression evaluating to a logical vector
 indicating which values should be used for computing the prior.}
@@ -34,35 +34,33 @@ An "ebb_prior" object, which contains a data.frame
   \item{raw.estimate}{Estimate without shrinkage (success / total)}
   \item{conf.low}{Lower bound of credible interval}
   \item{conf.high}{Upper bound of credible interval}
-
-It also contains a data frame \code{prior} with the estimated
-parameters for the beta distribution.
 }
 \description{
-Estimate proportions of various success/total counts
+Add columns to a data frame representing empirical Bayes shrinkage
+towards an estimated beta prior. This calls the \code{\link{ebb_fit_prior}}
+function to fit the prior, then adds the columns using
+\code{\link{augment.ebb_prior}}. It is thus a useful wrapper when you're
+not interested in the prior itself, but only in applying it to shrink data.
 }
 \examples{
 
 library(dplyr)
 set.seed(2017)
 
+# simulate 200 random examples from a beta-binomial
 obs <- 200
 dat <- data_frame(prob = rbeta(obs, 10, 50),
-                  total = round(rlnorm(obs, 6, 2)) + 1,
+                  total = round(rlnorm(obs, 4, 2)) + 1,
                   x = rbinom(obs, total, prob))
 
 result <- add_ebb_estimate(dat, x, total)
+result
 
+# visualize the shrinkage towards the prior mean
 library(ggplot2)
-
-alpha0 <- result$alpha1[1] - result$x[1]
-beta0 <- result$beta1[1] - result$total[1] + result$x[1]
-prior <- alpha0 / (alpha0 + beta0)
-
 ggplot(result, aes(.raw, .fitted, color = log10(total))) +
   geom_point() +
-  geom_abline(color = "red") +
-  geom_hline(yintercept = prior, color = "red", lty = 2)
+  geom_abline(color = "red")
 
 }
 \seealso{

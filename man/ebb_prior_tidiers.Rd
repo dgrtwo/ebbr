@@ -9,7 +9,7 @@
 \usage{
 \method{tidy}{ebb_prior}(x, ...)
 
-\method{augment}{ebb_prior}(x, data, conf.level = 0.95, newdata = NULL, ...)
+\method{augment}{ebb_prior}(x, data, cred_level = 0.95, newdata = NULL, ...)
 
 \method{glance}{ebb_prior}(x, ...)
 }
@@ -20,7 +20,7 @@
 
 \item{data}{For augment, the original data that should be appended to.}
 
-\item{conf.level}{For augment, the level of the credible intervals for each
+\item{cred_level}{For augment, the level of the credible intervals for each
 observation. If NULL, do not add credible intervals.}
 
 \item{newdata}{For augment, a new data set.}
