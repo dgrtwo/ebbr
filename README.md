@@ -2,7 +2,15 @@
 
 
 
-ebbinom: Empirical Bayes estimation of binomial data
+ebbr: Empirical Bayes on Binomial in R
 ----------
 
-This implements the methods described in [this blog post](http://varianceexplained.org/r/empirical_bayes_baseball/), among others. It is a work in progress.
+**License**: MIT
+
+[![Travis-CI Build Status](https://travis-ci.org/dgrtwo/ebbr.svg?branch=master)](https://travis-ci.org/dgrtwo/ebbr)
+
+This implements the methods described in my series of baseball blog posts. Work in progress.
+
+### Code of Conduct
+
+Please note that this project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project you agree to abide by its terms.
