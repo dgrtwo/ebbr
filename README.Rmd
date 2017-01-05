@@ -8,7 +8,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-ebbinom: Empirical Bayes estimation of binomial data
+ebbr: Empirical Bayes on Binomial in R
 ----------
 
-This implements the methods described in [this blog post](http://varianceexplained.org/r/empirical_bayes_baseball/), among others. It is a work in progress.
+This implements the methods described in my series of baseball blog posts. Work in progress.

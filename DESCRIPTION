@@ -1,19 +1,32 @@
-Package: ebbinom
+Package: ebbr
 Type: Package
 Title: Empirical Bayes on binomial data
 Version: 0.1
 Date: 2015-11-02
-Author: c(person("David", "Robinson", email = "admiral.david@gmail.com", role = c("aut", "cre")))
+Author: c(person("David", "Robinson", email = "admiral.david@gmail.com", role =
+    c("aut", "cre")))
 Maintainer: David Robinson <admiral.david@gmail.com>
-Description: This contains tools for performing empirical bayes
-    estimation on binomial data. This estimates a beta prior on the full
-    dataset, then updates based on each individual binomial
-    observation.
+Description: Tools for performing empirical bayes estimation on binomial data.
+    This estimates a beta prior on the full dataset, then updates based on
+    each individual binomial observation.
 License: MIT + file LICENSE
 LazyData: TRUE
-Imports: gamlss,
+Imports:
+    dplyr,
+    purrr,
+    gamlss,
+    gamlss.dist,
+    stats4,
+    VGAM,
+    lazyeval,
     ggplot2,
     broom,
-    lazyeval
-Suggests: dplyr,
-    testthat
+    tidyr,
+    utils
+Suggests:
+    testthat,
+    knitr,
+    rmarkdown,
+    Lahman
+RoxygenNote: 5.0.1
+VignetteBuilder: knitr
