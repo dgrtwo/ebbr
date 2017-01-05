@@ -49,7 +49,7 @@
 #'
 #' @export
 add_ebb_estimate <- function(tbl, x, n,
-                               cred_level = .05,
+                               cred_level = .95,
                                prior_subset = TRUE,
                                ...) {
   add_ebb_estimate_(tbl, substitute(x),
