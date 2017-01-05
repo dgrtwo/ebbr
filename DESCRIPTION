@@ -2,7 +2,7 @@ Package: ebbr
 Type: Package
 Title: Empirical Bayes on binomial data
 Version: 0.1
-Date: 2015-11-02
+Date: 2017-01-05
 Author: c(person("David", "Robinson", email = "admiral.david@gmail.com", role =
     c("aut", "cre")))
 Maintainer: David Robinson <admiral.david@gmail.com>
