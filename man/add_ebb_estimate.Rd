@@ -5,7 +5,7 @@
 \alias{add_ebb_estimate_}
 \title{Perform empirical Bayes shrinkage on a data frame}
 \usage{
-add_ebb_estimate(tbl, x, n, cred_level = 0.05, prior_subset = TRUE, ...)
+add_ebb_estimate(tbl, x, n, cred_level = 0.95, prior_subset = TRUE, ...)
 
 add_ebb_estimate_(tbl, x, n, prior_subset = TRUE, cred_level = 0.05, ...)
 }
