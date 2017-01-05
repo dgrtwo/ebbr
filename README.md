@@ -5,7 +5,7 @@
 ebbr: Empirical Bayes on the Binomial in R
 ----------
 
-**License**: MIT
+**License**: [MIT](https://opensource.org/licenses/MIT)
 
 [![Travis-CI Build Status](https://travis-ci.org/dgrtwo/ebbr.svg?branch=master)](https://travis-ci.org/dgrtwo/ebbr)
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/dgrtwo/ebbr?branch=master&svg=true)](https://ci.appveyor.com/project/dgrtwo/ebbr)
@@ -15,7 +15,7 @@ Methods for empirical Bayes shrinkage and estimation on data with many observati
 
 ### Installation
 
-You can install the package from GitHub using [devtools](https://cran.r-project.org/web/packages/devtools/index.html):
+You can install the package from GitHub using [devtools](https://CRAN.R-project.org/package=devtools):
 
 
 ```r
