@@ -3,12 +3,18 @@
 ```{r, echo = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>",
-  fig.path = "README-"
+  fig.path = "README-",
+  cache.path = "README-cache/",
+  cache = TRUE,
+  message = FALSE,
+  warning = FALSE
 )
+
+library(ggplot2)
+theme_set(theme_bw())
 ```
 
-ebbr: Empirical Bayes on Binomial in R
+ebbr: Empirical Bayes on the Binomial in R
 ----------
 
 **License**: MIT
@@ -17,7 +23,91 @@ ebbr: Empirical Bayes on Binomial in R
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/dgrtwo/ebbr?branch=master&svg=true)](https://ci.appveyor.com/project/dgrtwo/ebbr)
 [![Coverage Status](https://img.shields.io/codecov/c/github/dgrtwo/ebbr/master.svg)](https://codecov.io/github/dgrtwo/ebbr?branch=master)
 
-This implements the methods described in my series of baseball blog posts. Work in progress.
+Methods for empirical Bayes shrinkage and estimation on data with many observations of success/total counts. These methods are described in [this series of blog posts on baseball batting averages](varianceexplained.org/r/ebbr-package), but can be applied to a variety of data types.
+
+### Installation
+
+You can install the package from GitHub using [devtools](https://cran.r-project.org/web/packages/devtools/index.html):
+
+```{r}
+devtools::install_github("dgrtwo/ebbr")
+```
+
+### Functions
+
+`ebbr` provides two types of functions: ones that fit particular models, and ones that add columns to data:
+
+* `ebb_fit_prior` fits a beta to a dataset of success/total counts using maximum likelihood estimation. It includes `tidy` to retrieve the alpha/beta parameters and `augment` to update observations with the prior.
+* `add_ebb_estimate` is a shortcut for performing `ebb_fit_prior` to fit a prior, then updating each observation to create a posterior.
+* `add_ebb_prop_test` performs an empirical Bayesian version of a one-sample or two-sample proportion test, comparing each observation in the data to either a fixed threshold or to another beta posterior.
+* `ebb_fit_mixture` fits a mixture of beta distributions as the prior.
+
+### Example
+
+Suppose we simulated some data from a beta-binomial model. Each observation has a true probability drawn from a beta distribution (with $$\alpha=10;\beta=40$$, and a mean of 20%). However, the totals vary, such that our estimate of `x / total` has a lot of noise for some observations:
+
+```{r sim_dat}
+library(dplyr)
+library(ggplot2)
+
+set.seed(2017)
+obs <- 1000
+sim_dat <- data_frame(prob = rbeta(obs, 10, 40),
+                  total = round(rlnorm(obs, 4, 2)) + 1,
+                  x = rbinom(obs, total, prob))
+```
+
+```{r sim_dat_plot, dependson = "sim_dat"}
+ggplot(sim_dat, aes(total, x / total)) +
+  geom_point() +
+  scale_x_log10()
+```
+
+We would want to shrink towards a beta prior, a process [described here](http://varianceexplained.org/r/empirical_bayes_baseball/). We can fit a beta prior using `ebb_fit_prior`:
+
+```{r prior, dependson = "dat"}
+prior <- sim_dat %>%
+  ebb_fit_prior(x, total)
+
+prior
+```
+
+Notice that the function takes the data frame first, since it is designed to be pipeable, and that the following two arguments are the success column and the total column. This computes an estimate of the prior based on maximum likelihood estimation, and gets rather close to the true alpha and beta values.
+
+We could then use that prior to update each individual. The `add_ebb_estimate` is a shortcut for both fitting the prior and updating observations, which is the most common use case:
+
+```{r shrunken, dependson = "sim_dat"}
+shrunken <- sim_dat %>%
+  add_ebb_estimate(x, total)
+
+shrunken
+```
+
+This adds columns to the data, including the raw `x / total` estimate (`.raw`) and the shrunken empirical Bayes estimate (`.fitted`):
+
+```{r shrinkage_plot, dependson = "shrunken"}
+ggplot(shrunken, aes(.raw, .fitted, color = log10(total))) +
+  geom_point() +
+  geom_abline(color = "red") +
+  geom_hline(yintercept = tidy(prior)$mean, color = "red", lty = 2)
+```
+
+The output also includes credible intervals for each observation. For example, we could examine the estimates and credible intervals of the first 20, and compare them to the true proportions:
+
+```{r}
+shrunken %>%
+  head(20) %>%
+  ggplot(aes(.fitted, rank(.fitted))) +
+  geom_point() +
+  geom_point(aes(x = prob), color = "red") +
+  geom_errorbarh(aes(xmin = .low, xmax = .high)) +
+  labs(x = "Empirical Bayes estimate (w/ 95% credible interval)",
+       y = "",
+       title = "Estimating proportions in 20 success / total observations",
+       subtitle = "The true proportions are shown in red")
+```
+
+As expected, the 95% credible intervals contain the true proportions about 95% of the time.
 
 ### Code of Conduct
 

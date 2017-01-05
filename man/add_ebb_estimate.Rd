@@ -26,21 +26,22 @@ indicating which values should be used for computing the prior.}
 such as \code{method}.}
 }
 \value{
-An "ebb_prior" object, which contains a data.frame
-\code{table} with the columns:
-  \item{alpha1}{Posterior alpha (shape1) parameter}
-  \item{beta1}{Posterior beta (shape2) parameter}
-  \item{estimate}{Posterior shrunken estimate}
-  \item{raw.estimate}{Estimate without shrinkage (success / total)}
-  \item{conf.low}{Lower bound of credible interval}
-  \item{conf.high}{Upper bound of credible interval}
+The original table, with several columns added based on
+empirical Bayes shrinkage:
+  \item{.alpha1}{Posterior alpha (shape1) parameter}
+  \item{.beta1}{Posterior beta (shape2) parameter}
+  \item{.fitted}{Posterior shrunken estimate}
+  \item{.raw}{Estimate without shrinkage (success / total)}
+  \item{.low}{Lower bound of credible interval}
+  \item{.high}{Upper bound of credible interval}
 }
 \description{
 Add columns to a data frame representing empirical Bayes shrinkage
 towards an estimated beta prior. This calls the \code{\link{ebb_fit_prior}}
 function to fit the prior, then adds the columns using
 \code{\link{augment.ebb_prior}}. It is thus a useful wrapper when you're
-not interested in the prior itself, but only in applying it to shrink data.
+not interested in the prior itself, but only in performing shrinkage
+on data.
 }
 \examples{
 
