@@ -129,7 +129,7 @@ ebb_fit_prior_ <- function(tbl, x, n,
     alpha <- ((1 - mu) / vr - 1 / mu) * mu ^ 2
     beta <- alpha * (1 / mu - 1)
 
-    parameters <- dplyr::data_frame(alpha = alpha, beta = beta)
+    parameters <- dplyr::tibble(alpha = alpha, beta = beta)
     fit <- NULL
   } else if (method == "mle") {
     mm_estimate <- ebb_fit_prior_(tbl, x, n, method = "mm")
@@ -145,7 +145,7 @@ ebb_fit_prior_ <- function(tbl, x, n,
 
     fit <- stats4::mle(ll, start, method = "L-BFGS-B", lower = c(1e-9, 1e-9), ...)
     ab <- stats4::coef(fit)
-    parameters <- dplyr::data_frame(alpha = ab[1], beta = ab[2])
+    parameters <- dplyr::tibble(alpha = ab[1], beta = ab[2])
   } else {
     # create a formula for beta-binomial model
     lhs <- substitute(cbind(x, n - x), list(x = x, n = n))

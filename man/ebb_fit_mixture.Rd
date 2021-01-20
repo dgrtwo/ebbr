@@ -43,7 +43,7 @@ library(purrr)
 
 # simulate some data
 set.seed(2017)
-sim_data <- data_frame(cluster = 1:2,
+sim_data <- tibble(cluster = 1:2,
                        alpha = c(30, 35),
                        beta = c(70, 15),
                        size = c(300, 700)) \%>\%

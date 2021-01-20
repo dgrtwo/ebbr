@@ -4,7 +4,7 @@ set.seed(2017)
 
 # simulate beta-binomial data
 obs <- 500
-dat <- data_frame(prob = rbeta(obs, 300, 700),
+dat <- tibble(prob = rbeta(obs, 300, 700),
                   total = round(rlnorm(obs, 6, 2)) + 1,
                   x = rbinom(obs, total, prob))
 
@@ -71,7 +71,7 @@ test_that("Can fit a beta-binomial prior with beta-binomial regression", {
   # simulate beta-binomial data with some predictor
   set.seed(2017)
   obs <- 500
-  dat2 <- data_frame(predictor = rnorm(obs),
+  dat2 <- tibble(predictor = rnorm(obs),
                      mu = plogis(predictor),
                      prob = rbeta(obs, 100 * mu, 100 * (1 - mu)),
                      total = round(rlnorm(obs, 6, 2)) + 1,

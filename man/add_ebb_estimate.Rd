@@ -50,7 +50,7 @@ set.seed(2017)
 
 # simulate 200 random examples from a beta-binomial
 obs <- 200
-dat <- data_frame(prob = rbeta(obs, 10, 50),
+dat <- tibble(prob = rbeta(obs, 10, 50),
                   total = round(rlnorm(obs, 4, 2)) + 1,
                   x = rbinom(obs, total, prob))
 

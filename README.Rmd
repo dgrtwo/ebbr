@@ -52,7 +52,7 @@ library(ggplot2)
 
 set.seed(2017)
 obs <- 1000
-sim_dat <- data_frame(prob = rbeta(obs, 10, 40),
+sim_dat <- tibble(prob = rbeta(obs, 10, 40),
                   total = round(rlnorm(obs, 4, 2)) + 1,
                   x = rbinom(obs, total, prob))
 ```

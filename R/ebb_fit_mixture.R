@@ -20,7 +20,7 @@
 #'
 #' # simulate some data
 #' set.seed(2017)
-#' sim_data <- data_frame(cluster = 1:2,
+#' sim_data <- tibble(cluster = 1:2,
 #'                        alpha = c(30, 35),
 #'                        beta = c(70, 15),
 #'                        size = c(300, 700)) %>%
@@ -67,7 +67,7 @@ ebb_fit_mixture_ <- function(tbl, x, n, clusters = 2, iter_max = 10, nstart = 1L
   est <- function(.) {
     eb <- ebb_fit_prior(., x, n, method = method, ...)
 
-    dplyr::data_frame(alpha = eb$parameters$alpha,
+    dplyr::tibble(alpha = eb$parameters$alpha,
                       beta = eb$parameters$beta,
                       mean = alpha / (alpha + beta),
                       number = nrow(.))
@@ -106,7 +106,7 @@ ebb_fit_mixture_ <- function(tbl, x, n, clusters = 2, iter_max = 10, nstart = 1L
   }
 
   # initialization
-  d <- dplyr::data_frame(id = seq_len(nrow(tbl)),
+  d <- dplyr::tibble(id = seq_len(nrow(tbl)),
                          x = eval(x, tbl),
                          n = eval(n, tbl),
                          .cluster = as.character(sample(clusters, nrow(tbl), replace = TRUE)))
@@ -125,7 +125,7 @@ ebb_fit_mixture_ <- function(tbl, x, n, clusters = 2, iter_max = 10, nstart = 1L
     purrr::map(~ mutate(., iteration = as.integer(iteration)))
 
   a <- assignments_fits$assignments
-  assignments <- dplyr::bind_cols(dplyr::data_frame(iteration = a$iteration),
+  assignments <- dplyr::bind_cols(dplyr::tibble(iteration = a$iteration),
                                   tbl[a$id, , drop = FALSE],
                                   a[c(".cluster", ".likelihood")])
 

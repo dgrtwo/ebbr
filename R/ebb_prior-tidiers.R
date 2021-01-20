@@ -50,7 +50,7 @@ augment.ebb_prior <- function(x, data, cred_level = .95, newdata = NULL, ...) {
   n_value <- lazyeval::lazy_eval(x$terms$n, data)
 
   if (x$method == "gamlss") {
-    ret <- dplyr::data_frame(
+    ret <- dplyr::tibble(
       .mu = stats::predict(x$fit, "mu", type = "response", data = original, newdata = newdata),
       .sigma = stats::predict(x$fit, "sigma", type = "response", data = original, newdata = newdata),
       .alpha0 = .mu / .sigma,
@@ -59,7 +59,7 @@ augment.ebb_prior <- function(x, data, cred_level = .95, newdata = NULL, ...) {
       .beta1 = n_value - x_value + .beta0
     )
   } else {
-    ret <- dplyr::data_frame(
+    ret <- dplyr::tibble(
       .alpha1 = x_value + x$parameters$alpha,
       .beta1 = n_value - x_value + x$parameters$beta)
   }
@@ -81,7 +81,7 @@ augment.ebb_prior <- function(x, data, cred_level = .95, newdata = NULL, ...) {
 #' @export
 glance.ebb_prior <- function(x, ...) {
   if (x$method == "gamlss") {
-    ret <- dplyr::data_frame(df = nrow(tidy(x)))
+    ret <- dplyr::tibble(df = nrow(tidy(x)))
   } else {
     ret <- broom::tidy(x)
   }
