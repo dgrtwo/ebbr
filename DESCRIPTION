@@ -29,5 +29,5 @@ Suggests:
     rmarkdown,
     Lahman,
     covr
-RoxygenNote: 5.0.1
+RoxygenNote: 7.1.1
 VignetteBuilder: knitr

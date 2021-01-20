@@ -67,4 +67,3 @@ ggplot(result, aes(.raw, .fitted, color = log10(total))) +
 \seealso{
 ebb_prior_tidiers
 }
-

@@ -5,9 +5,18 @@
 \title{Estimate the shape parameters of a beta by fitting
 a beta-binomial distribution}
 \usage{
-ebb_fit_prior(tbl, x, n, method = c("mle", "mm", "gamlss"),
-  mu_predictors = ~1, sigma_predictors = ~1, mu_link = "logit",
-  sigma_link = "log", start = NULL, ...)
+ebb_fit_prior(
+  tbl,
+  x,
+  n,
+  method = c("mle", "mm", "gamlss"),
+  mu_predictors = ~1,
+  sigma_predictors = ~1,
+  mu_link = "logit",
+  sigma_link = "log",
+  start = NULL,
+  ...
+)
 }
 \arguments{
 \item{tbl}{A table.}
@@ -105,4 +114,3 @@ ggplot(augment(eb), aes(AB, .fitted)) +
   scale_x_log10()
 
 }
-

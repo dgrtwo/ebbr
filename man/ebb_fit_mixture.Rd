@@ -5,11 +5,29 @@
 \alias{ebb_fit_mixture_}
 \title{Fit a mixture of beta-binomial distributions}
 \usage{
-ebb_fit_mixture(tbl, x, n, clusters = 2, iter_max = 10, nstart = 1L,
-  vary_size = FALSE, method = "mle", ...)
+ebb_fit_mixture(
+  tbl,
+  x,
+  n,
+  clusters = 2,
+  iter_max = 10,
+  nstart = 1L,
+  vary_size = FALSE,
+  method = "mle",
+  ...
+)
 
-ebb_fit_mixture_(tbl, x, n, clusters = 2, iter_max = 10, nstart = 1L,
-  vary_size = FALSE, method = "mle", ...)
+ebb_fit_mixture_(
+  tbl,
+  x,
+  n,
+  clusters = 2,
+  iter_max = 10,
+  nstart = 1L,
+  vary_size = FALSE,
+  method = "mle",
+  ...
+)
 }
 \arguments{
 \item{tbl}{A table.}
@@ -67,4 +85,3 @@ ggplot(mm$assignments, aes(x / total, fill = .cluster)) +
   geom_histogram()
 
 }
-

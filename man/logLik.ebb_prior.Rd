@@ -14,4 +14,3 @@
 \description{
 Log-likelihood of an ebb_prior object
 }
-

@@ -14,4 +14,3 @@
 \description{
 Print an ebb_prior object
 }
-
