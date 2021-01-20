@@ -26,7 +26,7 @@
 #'
 #' @export
 tidy.ebb_prior <- function(x, ...) {
-  ret <- dplyr::tbl_df(x$parameters)
+  ret <- dplyr::tibble(x$parameters)
 
   if (x$method != "gamlss") {
     ret$mean <- ret$alpha / (ret$alpha + ret$beta)

@@ -21,7 +21,7 @@
 \item{data}{The original data that the mixture model was fit on}
 }
 \value{
-\code{tidy} returns a tbl_df with one row for each cluster,
+\code{tidy} returns a tibble with one row for each cluster,
 with columns
   \item{cluster}{A character vector with cluster IDs}
   \item{alpha}{alpha shape parameter for this cluster}
