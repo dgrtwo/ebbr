@@ -85,7 +85,12 @@ glance.ebb_prior <- function(x, ...) {
   } else {
     ret <- broom::tidy(x)
   }
-  broom::finish_glance(ret, x)
+  ret %>%
+    mutate(
+      logLik = stats::logLik(x),
+      AIC = stats::AIC(x),
+      BIC = stats::BIC(x),
+    )
 }
 
 

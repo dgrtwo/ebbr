@@ -42,6 +42,10 @@ augment.ebb_mixture <- function(x, data, ...) {
 #' @rdname ebb_mixture_tidiers
 #' @export
 glance.ebb_mixture <- function(x, ...) {
-  ret <- dplyr::tibble(iter = x$num_iter)
-  broom::finish_glance(ret, x)
+  dplyr::tibble(
+    iter = x$num_iter,
+    logLik = stats::logLik(x),
+    AIC = stats::AIC(x),
+    BIC = stats::BIC(x),
+  )
 }
