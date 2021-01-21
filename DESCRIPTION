@@ -22,7 +22,8 @@ Imports:
     ggplot2,
     broom,
     tidyr,
-    utils
+    utils,
+    broom.mixed
 Suggests:
     testthat,
     knitr,

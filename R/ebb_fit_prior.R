@@ -161,6 +161,8 @@ ebb_fit_prior_ <- function(tbl, x, n,
     )
 
     parameters <- broom::tidy(fit)
+    colnames(parameters)[colnames(parameters) == ".rownames"] <- "term" # for broom.mixed
+    parameters
   }
 
   # other housekeeping
