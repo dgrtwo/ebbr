@@ -24,8 +24,8 @@
 #'                        alpha = c(30, 35),
 #'                        beta = c(70, 15),
 #'                        size = c(300, 700)) %>%
-#'   by_row(~ rbeta(.$size, .$alpha, .$beta)) %>%
-#'   unnest(p = .out) %>%
+#'   group_by(across()) %>%
+#'   summarize(p = rbeta(size, alpha, beta), .groups = "drop") %>%
 #'   mutate(total = round(rlnorm(n(), 5, 2) + 1),
 #'          x = rbinom(n(), total, p))
 #'
@@ -80,8 +80,8 @@ ebb_fit_mixture_ <- function(tbl, x, n, clusters = 2, iter_max = 10, nstart = 1L
     }
 
     fits <- state$assignments %>%
-      tidyr::nest(-.cluster) %>%
-      tidyr::unnest(purrr::map(data, est), .drop = TRUE)
+      tidyr::nest_legacy(-.cluster) %>%
+      tidyr::unnest_legacy(purrr::map(data, est), .drop = TRUE)
 
     if (vary_size) {
       fits$probability <- fits$number / nrow(fits)

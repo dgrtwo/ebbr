@@ -65,8 +65,8 @@ sim_data <- tibble(cluster = 1:2,
                        alpha = c(30, 35),
                        beta = c(70, 15),
                        size = c(300, 700)) \%>\%
-  by_row(~ rbeta(.$size, .$alpha, .$beta)) \%>\%
-  unnest(p = .out) \%>\%
+  group_by(across()) \%>\%
+  summarize(p = rbeta(size, alpha, beta), .groups = "drop") \%>\%
   mutate(total = round(rlnorm(n(), 5, 2) + 1),
          x = rbinom(n(), total, p))
 
