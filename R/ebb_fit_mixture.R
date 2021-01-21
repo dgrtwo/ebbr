@@ -59,7 +59,7 @@ ebb_fit_mixture_ <- function(tbl, x, n, clusters = 2, iter_max = 10, nstart = 1L
   }
 
   if (nstart > 1L) {
-    mixtures <- purrr::map(seq_len(nstart), ~ ebb_fit_mixture_(tbl, x, n, clusters, iter_max, ...))
+    mixtures <- replicate(nstart, {ebb_fit_mixture_(tbl, x, n, clusters, iter_max, vary_size = vary_size, method = method, ...)}, simplify  = FALSE)
     log_liks <- purrr::map_dbl(mixtures, stats::logLik)
     return(mixtures[[which.max(log_liks)]])
   }
