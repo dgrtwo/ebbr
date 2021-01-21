@@ -8,7 +8,7 @@
 #' @param data The original data that the mixture model was fit on
 #' @param ... Extra arguments, not used
 #'
-#' @return \code{tidy} returns a tbl_df with one row for each cluster,
+#' @return \code{tidy} returns a tibble with one row for each cluster,
 #' with columns
 #'   \item{cluster}{A character vector with cluster IDs}
 #'   \item{alpha}{alpha shape parameter for this cluster}
@@ -42,6 +42,10 @@ augment.ebb_mixture <- function(x, data, ...) {
 #' @rdname ebb_mixture_tidiers
 #' @export
 glance.ebb_mixture <- function(x, ...) {
-  ret <- dplyr::data_frame(iter = x$num_iter)
-  broom::finish_glance(ret, x)
+  dplyr::tibble(
+    iter = x$num_iter,
+    logLik = stats::logLik(x),
+    AIC = stats::AIC(x),
+    BIC = stats::BIC(x),
+  )
 }

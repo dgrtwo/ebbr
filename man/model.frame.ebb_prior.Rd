@@ -16,4 +16,3 @@ empirical Bayes model fit}
 Extract the data frame with the variables needed to evaluate an
 empirical Bayes model fit
 }
-

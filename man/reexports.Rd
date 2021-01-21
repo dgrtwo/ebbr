@@ -2,17 +2,17 @@
 % Please edit documentation in R/ebb_prior-tidiers.R
 \docType{import}
 \name{reexports}
-\alias{augment}
-\alias{glance}
 \alias{reexports}
 \alias{tidy}
+\alias{augment}
+\alias{glance}
 \title{Objects exported from other packages}
+\keyword{internal}
 \description{
 These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{broom}{\code{\link[broom]{tidy}}, \code{\link[broom]{augment}}, \code{\link[broom]{glance}}}
+  \item{broom}{\code{\link[broom:reexports]{augment}}, \code{\link[broom:reexports]{glance}}, \code{\link[broom:reexports]{tidy}}}
 }}
-\keyword{internal}
 

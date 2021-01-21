@@ -4,8 +4,13 @@
 \alias{add_ebb_prop_test}
 \title{Add columns representing a per-observation proportion test}
 \usage{
-add_ebb_prop_test(tbl, threshold, alternative = c("greater", "less"),
-  sort = FALSE, approx = FALSE)
+add_ebb_prop_test(
+  tbl,
+  threshold,
+  alternative = c("greater", "less"),
+  sort = FALSE,
+  approx = FALSE
+)
 }
 \arguments{
 \item{tbl}{A table that includes .alpha1 and .beta1 parameters for each
@@ -35,7 +40,7 @@ library(dplyr)
 set.seed(2017)
 
 obs <- 1000
-dat <- data_frame(prob = rbeta(obs, 10, 40),
+dat <- tibble(prob = rbeta(obs, 10, 40),
                   total = round(rlnorm(obs, 6, 2)) + 1,
                   x = rbinom(obs, total, prob))
 
@@ -55,4 +60,3 @@ ggplot(add_ebb_prop_test(eb, .25), aes(prob, .pep, color = log10(total))) +
   geom_vline(xintercept = .25, color = "red", lty = 2)
 
 }
-

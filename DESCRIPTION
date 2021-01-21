@@ -22,12 +22,13 @@ Imports:
     ggplot2,
     broom,
     tidyr,
-    utils
+    utils,
+    broom.mixed
 Suggests:
     testthat,
     knitr,
     rmarkdown,
     Lahman,
     covr
-RoxygenNote: 5.0.1
+RoxygenNote: 7.1.1
 VignetteBuilder: knitr

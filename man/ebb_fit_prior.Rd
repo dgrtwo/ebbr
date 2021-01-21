@@ -5,9 +5,18 @@
 \title{Estimate the shape parameters of a beta by fitting
 a beta-binomial distribution}
 \usage{
-ebb_fit_prior(tbl, x, n, method = c("mle", "mm", "gamlss"),
-  mu_predictors = ~1, sigma_predictors = ~1, mu_link = "logit",
-  sigma_link = "log", start = NULL, ...)
+ebb_fit_prior(
+  tbl,
+  x,
+  n,
+  method = c("mle", "mm", "gamlss"),
+  mu_predictors = ~1,
+  sigma_predictors = ~1,
+  mu_link = "logit",
+  sigma_link = "log",
+  start = NULL,
+  ...
+)
 }
 \arguments{
 \item{tbl}{A table.}
@@ -41,7 +50,7 @@ are estimated by the method of moments.}
 \value{
 An object of class "ebb_prior", which contains the estimated parameters of a
 beta-binomial distribution:
-  \item{parameters}{Either a one-row tbl_df with alpha and beta parameters,
+  \item{parameters}{Either a one-row tibble with alpha and beta parameters,
   or (if method is "gamlss"), the coefficients for computing \code{mu} and
   \code{sigma}}.
   \item{fit}{The result of the estimation process. An "mle" object if method
@@ -68,7 +77,7 @@ library(dplyr)
 
 career <- Batting \%>\%
   anti_join(Pitching, by = "playerID") \%>\%
-  tbl_df() \%>\%
+  tibble() \%>\%
   filter(yearID > 1980) \%>\%
   group_by(playerID) \%>\%
   summarize(H = sum(H), AB = sum(AB)) \%>\%
@@ -105,4 +114,3 @@ ggplot(augment(eb), aes(AB, .fitted)) +
   scale_x_log10()
 
 }
-

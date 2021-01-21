@@ -20,12 +20,12 @@
 #'
 #' # simulate some data
 #' set.seed(2017)
-#' sim_data <- data_frame(cluster = 1:2,
+#' sim_data <- tibble(cluster = 1:2,
 #'                        alpha = c(30, 35),
 #'                        beta = c(70, 15),
 #'                        size = c(300, 700)) %>%
-#'   by_row(~ rbeta(.$size, .$alpha, .$beta)) %>%
-#'   unnest(p = .out) %>%
+#'   group_by(across()) %>%
+#'   summarize(p = rbeta(size, alpha, beta), .groups = "drop") %>%
 #'   mutate(total = round(rlnorm(n(), 5, 2) + 1),
 #'          x = rbinom(n(), total, p))
 #'
@@ -59,7 +59,7 @@ ebb_fit_mixture_ <- function(tbl, x, n, clusters = 2, iter_max = 10, nstart = 1L
   }
 
   if (nstart > 1L) {
-    mixtures <- purrr::map(seq_len(nstart), ~ ebb_fit_mixture_(tbl, x, n, clusters, iter_max, ...))
+    mixtures <- replicate(nstart, {ebb_fit_mixture_(tbl, x, n, clusters, iter_max, vary_size = vary_size, method = method, ...)}, simplify  = FALSE)
     log_liks <- purrr::map_dbl(mixtures, stats::logLik)
     return(mixtures[[which.max(log_liks)]])
   }
@@ -67,7 +67,7 @@ ebb_fit_mixture_ <- function(tbl, x, n, clusters = 2, iter_max = 10, nstart = 1L
   est <- function(.) {
     eb <- ebb_fit_prior(., x, n, method = method, ...)
 
-    dplyr::data_frame(alpha = eb$parameters$alpha,
+    dplyr::tibble(alpha = eb$parameters$alpha,
                       beta = eb$parameters$beta,
                       mean = alpha / (alpha + beta),
                       number = nrow(.))
@@ -80,8 +80,8 @@ ebb_fit_mixture_ <- function(tbl, x, n, clusters = 2, iter_max = 10, nstart = 1L
     }
 
     fits <- state$assignments %>%
-      tidyr::nest(-.cluster) %>%
-      tidyr::unnest(purrr::map(data, est), .drop = TRUE)
+      tidyr::nest_legacy(-.cluster) %>%
+      tidyr::unnest_legacy(purrr::map(data, est), .drop = TRUE)
 
     if (vary_size) {
       fits$probability <- fits$number / nrow(fits)
@@ -106,7 +106,7 @@ ebb_fit_mixture_ <- function(tbl, x, n, clusters = 2, iter_max = 10, nstart = 1L
   }
 
   # initialization
-  d <- dplyr::data_frame(id = seq_len(nrow(tbl)),
+  d <- dplyr::tibble(id = seq_len(nrow(tbl)),
                          x = eval(x, tbl),
                          n = eval(n, tbl),
                          .cluster = as.character(sample(clusters, nrow(tbl), replace = TRUE)))
@@ -125,7 +125,7 @@ ebb_fit_mixture_ <- function(tbl, x, n, clusters = 2, iter_max = 10, nstart = 1L
     purrr::map(~ mutate(., iteration = as.integer(iteration)))
 
   a <- assignments_fits$assignments
-  assignments <- dplyr::bind_cols(dplyr::data_frame(iteration = a$iteration),
+  assignments <- dplyr::bind_cols(dplyr::tibble(iteration = a$iteration),
                                   tbl[a$id, , drop = FALSE],
                                   a[c(".cluster", ".likelihood")])
 

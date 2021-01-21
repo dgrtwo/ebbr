@@ -4,7 +4,7 @@ set.seed(2017)
 
 # simulate beta-binomial data
 obs <- 500
-dat <- data_frame(prob = rbeta(obs, 300, 700),
+dat <- tibble(prob = rbeta(obs, 300, 700),
                   total = round(rlnorm(obs, 6, 2)) + 1,
                   x = rbinom(obs, total, prob))
 

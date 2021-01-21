@@ -22,7 +22,7 @@
 #' set.seed(2017)
 #'
 #' obs <- 1000
-#' dat <- data_frame(prob = rbeta(obs, 10, 40),
+#' dat <- tibble(prob = rbeta(obs, 10, 40),
 #'                   total = round(rlnorm(obs, 6, 2)) + 1,
 #'                   x = rbinom(obs, total, prob))
 #'

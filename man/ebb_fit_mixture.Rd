@@ -5,11 +5,29 @@
 \alias{ebb_fit_mixture_}
 \title{Fit a mixture of beta-binomial distributions}
 \usage{
-ebb_fit_mixture(tbl, x, n, clusters = 2, iter_max = 10, nstart = 1L,
-  vary_size = FALSE, method = "mle", ...)
+ebb_fit_mixture(
+  tbl,
+  x,
+  n,
+  clusters = 2,
+  iter_max = 10,
+  nstart = 1L,
+  vary_size = FALSE,
+  method = "mle",
+  ...
+)
 
-ebb_fit_mixture_(tbl, x, n, clusters = 2, iter_max = 10, nstart = 1L,
-  vary_size = FALSE, method = "mle", ...)
+ebb_fit_mixture_(
+  tbl,
+  x,
+  n,
+  clusters = 2,
+  iter_max = 10,
+  nstart = 1L,
+  vary_size = FALSE,
+  method = "mle",
+  ...
+)
 }
 \arguments{
 \item{tbl}{A table.}
@@ -43,12 +61,12 @@ library(purrr)
 
 # simulate some data
 set.seed(2017)
-sim_data <- data_frame(cluster = 1:2,
+sim_data <- tibble(cluster = 1:2,
                        alpha = c(30, 35),
                        beta = c(70, 15),
                        size = c(300, 700)) \%>\%
-  by_row(~ rbeta(.$size, .$alpha, .$beta)) \%>\%
-  unnest(p = .out) \%>\%
+  group_by(across()) \%>\%
+  summarize(p = rbeta(size, alpha, beta), .groups = "drop") \%>\%
   mutate(total = round(rlnorm(n(), 5, 2) + 1),
          x = rbinom(n(), total, p))
 
@@ -67,4 +85,3 @@ ggplot(mm$assignments, aes(x / total, fill = .cluster)) +
   geom_histogram()
 
 }
-
