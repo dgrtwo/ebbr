@@ -132,9 +132,9 @@ ebb_fit_prior_ <- function(tbl, x, n,
     parameters <- dplyr::data_frame(alpha = alpha, beta = beta)
     fit <- NULL
   } else if (method == "mle") {
-    mm_estimate <- ebb_fit_prior_(tbl, x, n, method = "mm")
 
     if (is.null(start)) {
+      mm_estimate <- ebb_fit_prior_(tbl, x, n, method = "mm")
       start <- list(alpha = mm_estimate$parameters$alpha,
                     beta = mm_estimate$parameters$beta)
     }
@@ -143,9 +143,21 @@ ebb_fit_prior_ <- function(tbl, x, n,
       -sum(VGAM::dbetabinom.ab(x_value, n_value, alpha, beta, log = TRUE))
     }
 
-    fit <- stats4::mle(ll, start, method = "L-BFGS-B", lower = c(1e-9, 1e-9), ...)
-    ab <- stats4::coef(fit)
-    parameters <- dplyr::data_frame(alpha = ab[1], beta = ab[2])
+    if (all(x_value==0)) {
+      alpha <- 0
+      beta <- NaN
+      fit <- "all k=0, no fit performed"
+    } else if (all(x_value==n_value)) {
+      alpha <- Inf
+      beta <- NaN
+      fit <- "all k=n, no fit performed"
+    } else {
+      fit <- stats4::mle(ll, start, method = "L-BFGS-B", lower = c(1e-9, 1e-9), ...)
+      ab <- stats4::coef(fit)
+      alpha <- ab[1]
+      beta <- ab[2]
+    }
+    parameters <- dplyr::tibble(alpha, beta)
   } else {
     # create a formula for beta-binomial model
     lhs <- substitute(cbind(x, n - x), list(x = x, n = n))
